@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CORS Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .form-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .form-group input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .form-group button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-group button:hover {
+            background-color: #45a049;
+        }
+
+        pre {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+<h2>CORS API Checker</h2>
+<div class="form-group">
+    <input type="text" id="apiUrl" placeholder="Masukkan URL API, contoh: https://api.kamu.com/data">
+    <button onclick="cekCORS()">Cek</button>
+</div>
+<h4>Hasil:</h4>
+<pre id="hasil">Belum ada hasil...</pre>
+
+<script>
+    async function cekCORS() {
+        const url = document.getElementById('apiUrl').value.trim();
+        const hasil = document.getElementById('hasil');
+
+        if (url === '') {
+            hasil.textContent = '❌ URL API tidak boleh kosong.';
+            return;
+        }
+
+        hasil.textContent = 'Sedang mengecek...';
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                mode: 'cors'
+            });
+
+            const text = await response.text();
+
+            hasil.textContent = `✅ Status: ${response.status} ${response.statusText}\n\nResponse:\n${text}`;
+        } catch (error) {
+            hasil.textContent = `❌ Gagal mengakses API: ${error.message}`;
+        }
+    }
+</script>
+</body>
+</html>
